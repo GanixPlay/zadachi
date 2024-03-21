@@ -6,6 +6,7 @@ from data.db_session import global_init, create_session
 from data.jobs import Jobs
 from data.users import User
 from data.departaments import Department
+from data.category import Category
 from forms.user import RegisterForm
 from forms.job_form import JobForm
 from forms.login import LoginForm
@@ -78,6 +79,10 @@ def new_job():
             collaborators=form.collaborators.data,
             is_finished=form.is_finished.data
         )
+        category = Category(
+            name=form.categories.data
+        )
+        job.categories.append(category)
         sess.add(job)
         sess.commit()
         return redirect('/')
