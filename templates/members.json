@@ -1,0 +1,22 @@
+{
+  "members": [
+    {
+      "name": "Ридли",
+      "surname": "Скотт",
+      "photo": "https://avatars.mds.yandex.net/i?id=56a0be87ca2b00829390cb3131deab52e76d6eaf-9198383-images-thumbs&ref=rim&n=33&w=334&h=250",
+      "speciality": ["Капитан", "Инжинер", "Медбрат"]
+    },
+    {
+      "name": "Энди",
+      "surname": "Уир",
+      "photo": "https://avatars.mds.yandex.net/i?id=8bdad31f2b91f91dd28d0ad65ba465a5474dc006-10654381-images-thumbs&ref=rim&n=33&w=250&h=250",
+      "speciality": ["Астрогеолог", "Специалист по радиоционной защите"]
+    },
+    {
+      "name": "Марк",
+      "surname": "Уотни",
+      "photo": "https://avatars.mds.yandex.net/i?id=bfb694be715dd5933aa73f19b378ed63ef090036-10639710-images-thumbs&ref=rim&n=33&w=250&h=250",
+      "speciality": ["Химик", "Врач"]
+    }
+  ]
+}
