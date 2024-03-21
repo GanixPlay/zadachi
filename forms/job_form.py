@@ -7,6 +7,7 @@ class JobForm(FlaskForm):
     team_leader = IntegerField('Id руководителя')
     job = StringField('Описание работы')
     work_size = IntegerField('Объём работы в часах')
+    categories = IntegerField('Cat')
     collaborators = StringField('Участники')
     end_date = DateTimeField('Дата завершения')
     is_finished = BooleanField('Работа завершена?')
