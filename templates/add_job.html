@@ -19,6 +19,10 @@
         {{ form.collaborators.label }}<br>
         {{ form.collaborators(class="form-control") }}<br>
     </p>
+    <p>
+        {{ form.categories.label }}<br>
+        {{ form.categories(class="form-control") }}<br>
+    </p>
     <p>{{ form.is_finished }} {{ form.is_finished.label }}</p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{ message }}
