@@ -1,7 +1,7 @@
 from flask import Flask, url_for, request, render_template, redirect, abort
 import json
 import base64
-from data import db_session, user_resource, jobs_resource
+from data import db_session, user_resource, jobs_resource, jobs_api, one_job, users_api
 from data.db_session import global_init, create_session
 from data.jobs import Jobs
 from data.users import User
@@ -13,6 +13,7 @@ from forms.login import LoginForm
 from forms.depart_form import DepartForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_restful import Api
+import requests
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -20,6 +21,8 @@ api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+KEY = '40d1649f-0493-4b70-98ba-98533de7710b'
 
 
 @app.route('/index')
@@ -218,8 +221,32 @@ def delete_depart(id):
     return redirect('/departments')
 
 
+@app.route('/users_show/<int:user_id>')
+def users_show(user_id):
+    user_data = requests.get(f'http://127.0.0.1:8080/api/users/{user_id}').json()
+    name = user_data['users'][0]['name']
+    surname = user_data['users'][0]['surname']
+    city = user_data['users'][0]['city_from']
+    zapros = f'http://geocode-maps.yandex.ru/1.x/?apikey={KEY}&geocode={city}&format=json'
+
+    response = requests.get(zapros)
+    if response:
+        response = response.json()
+        toponim = response['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
+        coords = toponim['Point']['pos']
+        coords = coords.split()
+
+    map_request = f"http://static-maps.yandex.ru/1.x/?ll={coords[0]},{coords[1]}&spn=0.1,0.1&l=map"
+    response = requests.get(map_request)
+    return render_template('users_show.html', name=name, surname=surname,
+                           image=base64.b64encode(response.content).decode("ascii"))
+
+
 def main():
-    db_session.global_init('db/jobs.db')
+    db_session.global_init('db/jobs1.db')
+    app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(one_job.blueprint)
+    app.register_blueprint(users_api.blueprint)
     api.add_resource(user_resource.UserResource, '/api/v2/users/<int:user_id>')
     api.add_resource(user_resource.UserListResource, '/api/v2/users/')
     api.add_resource(jobs_resource.JobsResource, '/api/v2/jobs/<int:job_id>')
