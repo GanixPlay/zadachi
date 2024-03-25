@@ -1,7 +1,7 @@
 from flask import Flask, url_for, request, render_template, redirect, abort
 import json
 import base64
-from data import db_session
+from data import db_session, user_resource, jobs_resource
 from data.db_session import global_init, create_session
 from data.jobs import Jobs
 from data.users import User
@@ -12,9 +12,11 @@ from forms.job_form import JobForm
 from forms.login import LoginForm
 from forms.depart_form import DepartForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_restful import Api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -218,6 +220,10 @@ def delete_depart(id):
 
 def main():
     db_session.global_init('db/jobs.db')
+    api.add_resource(user_resource.UserResource, '/api/v2/users/<int:user_id>')
+    api.add_resource(user_resource.UserListResource, '/api/v2/users/')
+    api.add_resource(jobs_resource.JobsResource, '/api/v2/jobs/<int:job_id>')
+    api.add_resource(jobs_resource.JobsListResource, '/api/v2/jobs/')
     app.run('127.0.0.1', port=8080)
 
 
